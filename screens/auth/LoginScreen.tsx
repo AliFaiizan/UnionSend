@@ -52,7 +52,7 @@ const LoginScreen = () => {
               base: "100%",
             }}
           >
-            <InputLeftAddon children={"+"} />
+            <InputLeftAddon children={"+"} w={10} />
             <Input
               w={{
                 base: "70%",
