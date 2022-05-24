@@ -1,38 +1,146 @@
 
-import { Box, VStack, Image, Stack,Text, Input, Button, Select, CheckIcon, Icon } from 'native-base'
-import React, { useState } from 'react'
+import { Box, VStack, Image, Stack,Text, Input, Button, Select, CheckIcon, Icon, KeyboardAvoidingView, InputLeftAddon, InputGroup, HStack } from 'native-base'
+import React, { useState ,useEffect } from 'react'
+import Svg,{Circle} from  'react-native-svg';
+import {AntDesign, MaterialIcons} from '@expo/vector-icons'
+import { Platform } from 'react-native';
+import useKeyboard from '../../components/hooks/useKeyboard';
+import LottieView from 'lottie-react-native'
 
-const SignUpScreen = () => {
+const size=130;
+const strokeWidth=20;
+const radius= (size-strokeWidth)/2;
+const circumference= radius*2*Math.PI;
 
-    const [Component,setComponent]=useState(<SelectState onContinue={() => { setComponent(<PhoneNumber />)}}/>)
 
-   
+
+
+const SignUpScreen = ({navigation}:any) => {
+
+    const [globalIndex,setGlobalIndex]=useState(1);
+
+    //want to show or hide image on weather the keyboard in open or not
+    const isKeyboardVisible=useKeyboard();
+
+    const LoadComponent = () => {
+
+        switch(globalIndex){
+            case 1:
+                return <SelectState onContinue={() => { setGlobalIndex(2) } } />
+                
+            case 2:
+                return <PhoneNumber onContinue={() => { setGlobalIndex(3)}} />
+
+            case 3:
+                return <VerifyPhoneNumber onContinue={() => { setGlobalIndex(4) }} />
+            
+            case 4:
+                return <EnterPersonalDetails onContinue={() => { setGlobalIndex(5)}} />
+            
+            case 5:
+                return <IdentityVerification onContinue={() => { setGlobalIndex(6) }} />
+            
+            case 6:
+                return (
+                  <ChooseUserName onContinue={() => {  setGlobalIndex(7); }}  />
+                );           
+            case 7:
+                return (
+                    <Congratulation onContinue={() => { navigation.goBack()  }} />
+                )
+        }
+
+    };
+    
+  
+
+    useEffect(() => {
+        
+        LoadComponent()
+      
+    }, [globalIndex])
+    
+
   return (
-    <VStack>
-      <Box alignItems="center" bg="black">
-        <Image
-          width={300}
-          height={100}
-          resizeMode="contain"
-          source={{
-            uri: "https://alpha.techcon.com.pk/unionsend-mobile/img/logo.png",
-          }}
-          alt="Alternate Text"
-        />
-      </Box>
-      <Stack bg="amber.100" alignItems="center">
-        <Text>progress</Text>
-        <Box alignItems="center">
-          <Text fontWeight="900">Create Your UnionSend Account</Text>
-          <Text>SignUp for free</Text>
-          <Text>No Back account or credit card needed</Text>
-        </Box>
-      </Stack>
-      <VStack p={10}>
-        {Component}
-       
+    <KeyboardAvoidingView
+      h={{
+        base: "600px",
+        lg: "auto",
+      }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <VStack>
+        {!isKeyboardVisible ? (
+          <Box alignItems="center">
+            <Image
+              width={300}
+              height={100}
+              resizeMode="contain"
+              source={{
+                uri: "https://alpha.techcon.com.pk/unionsend-mobile/img/logo.png",
+              }}
+              alt="Alternate Text"
+            />
+          </Box>
+        ) : (
+          <></>
+        )}
+        {/* progress bar */}
+        <HStack
+          alignItems="center"
+          justifyContent="space-around"
+          
+          px={5}
+        >
+          <Box justifyContent={"center"} alignItems={"center"}>
+            <Button
+              w={10}
+              h={10}
+              borderRadius={50}
+              bg={"emerald.600"}
+              isDisabled={globalIndex <= 1}
+              onPress={() => {
+                setGlobalIndex(globalIndex - 1);
+              }}
+            >
+              {globalIndex - 1}
+            </Button>
+          </Box>
+          <Svg
+            width={size}
+            height={size}
+            
+          >
+            <Circle
+              stroke="green"
+              fill="none"
+              cx={size / 2}
+              cy={size / 2}
+              r={radius}
+              {...{ strokeWidth }}
+              strokeDasharray={`${circumference} ${circumference}`}
+            ></Circle>
+            <Text alignSelf={'center'} mt={12} fontSize={20} fontWeight='bold'>{globalIndex} / 7</Text>
+          </Svg>
+          <Box justifyContent={"center"} alignItems={"center"}>
+            <Button
+              w={10}
+              h={10}
+              borderRadius={50}
+              bg={"emerald.600"}
+              isDisabled={globalIndex >= 7}
+              onPress={() => { 
+                  setGlobalIndex(globalIndex + 1);
+              }}
+            >
+              { globalIndex===7?globalIndex: globalIndex + 1}
+            </Button>
+          </Box>
+        </HStack>
+        {/* Bottom component */}
+        <VStack p={3}>{LoadComponent()}</VStack>
       </VStack>
-    </VStack>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -40,51 +148,263 @@ const SelectState=({onContinue}:any) => {
     let [service, setService] = React.useState("");
     return (
       <Box>
-        <Select
-          selectedValue={service}
-          minWidth="200"
-          accessibilityLabel="Choose Service"
-          placeholder="Choose Service"
-          _selectedItem={{
-            bg: "teal.600",
-            endIcon: <CheckIcon size="5" />,
-          }}
-          mt={1}
-          onValueChange={(itemValue) => setService(itemValue)}
-        >
-          <Select.Item label="San Fransisco" value="ux" />
-          <Select.Item label="San Deigo" value="web" />
-          <Select.Item label="Albama" value="cross" />
-          <Select.Item label="Detroit" value="ui" />
-          <Select.Item label="California" value="backend" />
-          <Select.Item label="Texas" value="ux" />
-        </Select>
-        <Button
-          mt={5}
-          colorScheme={"emerald"}
-          onPress={onContinue}
-        >
-          Continue
-        </Button>
+          <Box alignItems="center">
+            <Text fontWeight="900">Create Your UnionSend Account</Text>
+            <Text>SignUp for free</Text>
+            <Text>No Back account or credit card needed</Text>
+
+          </Box>
+          <Box px={5}>
+            <Select
+            selectedValue={service}
+            minWidth="200"
+            accessibilityLabel="Choose a State"
+            placeholder="Choose a State"
+            _selectedItem={{
+                bg: "teal.600",
+                endIcon: <CheckIcon size="5" />,
+            }}
+            mt={1}
+            onValueChange={(itemValue) => setService(itemValue)}
+            >
+            <Select.Item label="San Fransisco" value="ux" />
+            <Select.Item label="San Deigo" value="web" />
+            <Select.Item label="Albama" value="cross" />
+            <Select.Item label="Detroit" value="ui" />
+            <Select.Item label="California" value="backend" />
+            <Select.Item label="Texas" value="ux" />
+            </Select>
+            <Button
+            mt={5}
+            colorScheme={"emerald"}
+            onPress={onContinue}
+            >
+            Continue
+            </Button>
+          </Box>
       </Box>
     );
  }
 
-const PhoneNumber = () => {
+const PhoneNumber = ({onContinue}:any) => {
    const [show, setShow] = React.useState(false);
    return (
-     <Stack space={4} w="100%" alignItems="center">
-      {/* <Input w={{
-      base: "75%",
-      md: "25%"
-    }} InputLeftElement={<Icon as={<MaterialIcons name="person" />} size={5} ml="2" color="muted.400" />} placeholder="Name" />
-      <Input w={{
-      base: "75%",
-      md: "25%"
-    }} type={show ? "text" : "password"} InputRightElement={<Icon as={<MaterialIcons name={show ? "visibility" : "visibility-off"} />} size={5} mr="2" color="muted.400" onPress={() => setShow(!show)} />} placeholder="Password" /> */}
-    </Stack>
+     <Box alignItems="center"> 
+       <Box alignItems="center" justifyContent={"center"}>
+         <Text fontWeight="900">Create Your Login Details</Text>
+
+         <Text textAlign="center">
+           Choose a safe password. Your phone Number will be verified in the
+           next step
+         </Text>
+       </Box>
+
+       <VStack justifyContent={'center'} alignItems={'center'} space={3} px={4} >
+         <InputGroup
+           w={{
+             base: "100%",
+           }}
+         >
+           <InputLeftAddon children={"+"} w={10} />
+           <Input
+             w={{
+               base:"88%",
+               md: "90%",
+             }}
+             placeholder="Phone Number"
+             keyboardType="numeric"
+           />
+         </InputGroup>
+         <Input
+           w={{
+             base: "100%",
+             md: "50%",
+           }}
+           type={show ? "text" : "password"}
+           InputRightElement={
+             <Icon
+               as={
+                 <MaterialIcons name={show ? "visibility" : "visibility-off"} />
+               }
+               size={5}
+               mr="2"
+               color="muted.400"
+               onPress={() => setShow(!show)}
+             />
+           }
+           placeholder="Password"
+         />
+         
+            <Button mt={1} colorScheme={"emerald"} onPress={onContinue} >
+                Continue
+            </Button>
+
+       </VStack>
+
+     </Box>
    );
  };
+
+ const VerifyPhoneNumber=({onContinue}:any) => { 
+     return (
+       <Box alignItems={"center"}>
+         <Box alignItems="center">
+           <Text fontWeight="900">Verify Your phone Number</Text>
+
+           <Text textAlign={"center"}>
+             Please Enter the code send to the number ending 4225
+           </Text>
+         </Box>
+         <Box px={5}>
+           <Input
+             w={{
+               base: "100%",
+               md: "90%",
+             }}
+             placeholder="Enter the Code"
+             keyboardType="numeric"
+             mt={2}
+           />
+
+           <Button mt={2} colorScheme={"emerald"} onPress={onContinue}>
+             Verify
+           </Button>
+         </Box>
+       </Box>
+     );
+  }
+ 
+
+const EnterPersonalDetails=({onContinue}:any) => {
+    return (
+      <Box alignItems={"center"}>
+        <Box alignItems="center">
+          <Text fontWeight="900">Enter Personal Details</Text>
+
+          <Text textAlign={"center"}>Tell us about Yourself</Text>
+        </Box>
+        <Box px={5}>
+          <Input
+            w={{
+              base: "100%",
+              md: "90%",
+            }}
+            placeholder="First Name"
+            
+            mt={2}
+          />
+          <Input
+            w={{
+              base: "100%",
+              md: "90%",
+            }}
+            placeholder="Last Name"
+            
+            mt={2}
+          />
+          <Input
+            w={{
+              base: "100%",
+              md: "90%",
+            }}
+            placeholder="Date of Birth"
+            mt={2}
+          />
+
+          <Button mt={2} colorScheme={"emerald"} onPress={onContinue}>
+            Continue
+          </Button>
+        </Box>
+      </Box>
+    );
+ }
+
+const IdentityVerification=({onContinue}:any) => { 
+     return (
+       <Box alignItems={"center"}>
+         <Box alignItems="center">
+           <Text fontWeight="900">Identity Verification</Text>
+
+           <Text textAlign={"center"}>
+             Help us verify your account by providing on of the Following
+           </Text>
+         </Box>
+         <Box px={5}>
+           <Input
+             w={{
+               base: "100%",
+               md: "90%",
+             }}
+             placeholder="BVN (11 Digits)"
+             mt={2}
+           />
+
+           <Button mt={2} colorScheme={"emerald"} onPress={onContinue}>
+             ENTER
+           </Button>
+           <Button variant={'outline'} mt={2} colorScheme={"emerald"} onPress={onContinue}>
+             SKIP
+           </Button>
+         </Box>
+       </Box>
+     );
+  }
+
+const ChooseUserName=({onContinue}:any) => { 
+    return (
+      <Box alignItems={"center"}>
+        <Box alignItems="center">
+          <Text fontWeight="900">Choose a UserName</Text>
+
+          <Text textAlign={"center"}>
+            A Username is your unique name for reciving cash on UnionSend
+          </Text>
+        </Box>
+        <Box px={5}>
+          <Input
+            w={{
+              base: "100%",
+              md: "90%",
+            }}
+            placeholder="Enter Username"
+            
+            mt={2}
+          />
+
+          <Button mt={2} colorScheme={"emerald"} onPress={onContinue}>
+            Continue
+          </Button>
+        </Box>
+      </Box>
+    );
+ }
+
+const Congratulation=({onContinue}:any) => { 
+     return (
+       <Box alignItems={"center"}>
+         <Box alignItems="center">
+           <Text fontWeight="900">Congratulations</Text>
+
+           <Text textAlign={"center"}>Your Account is ready</Text>
+         </Box>
+         <Box px={5}>
+           
+             <LottieView
+               style={{ height: 200, alignSelf: "center", marginBottom: 5 }}
+               source={require("../../assets/animations/congratulation.json")}
+               autoPlay
+
+             />           
+
+           <Button mt={2} colorScheme={"emerald"} onPress={onContinue}>
+             Done
+           </Button>
+         </Box>
+       </Box>
+     );
+  }
+
+
 
 export default SignUpScreen
 
