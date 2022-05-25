@@ -1,12 +1,24 @@
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
+import { useDispatch } from 'react-redux'
 import { Text, Box, Button ,VStack,Center,Image, Input, InputGroup, InputLeftAddon, KeyboardAvoidingView } from "native-base";
 import { Platform ,} from 'react-native';
+import * as AuthActions from '../../store/actions/auth.action'
 
 const LoginScreen = () => {
 
+  const dispatch=useDispatch()
 
   const [loading,setloading]= useState(false)
+
+  const loginHandler=useCallback(() => { 
+    setloading(true)
+    setTimeout(() => {  
+      setloading(false)
+      dispatch(AuthActions.setIsLogin())
+
+    },2000)
+   },[dispatch])
 
 
   return (
@@ -68,9 +80,7 @@ const LoginScreen = () => {
             isLoading={loading}
             spinnerPlacement="end"
             isLoadingText="Logging In"
-            onPress={() => {
-              setloading(true);
-            }}
+            onPress={loginHandler}
             colorScheme="emerald"
           >
             Proceed

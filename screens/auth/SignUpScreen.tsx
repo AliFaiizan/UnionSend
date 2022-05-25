@@ -1,23 +1,38 @@
 
-import { Box, VStack, Image, Stack,Text, Input, Button, Select, CheckIcon, Icon, KeyboardAvoidingView, InputLeftAddon, InputGroup, HStack } from 'native-base'
-import React, { useState ,useEffect } from 'react'
-import Svg,{Circle} from  'react-native-svg';
+import { Box, VStack, Image, Stack,Text, Input, Button, Select, CheckIcon, Icon, KeyboardAvoidingView, InputLeftAddon, InputGroup, HStack, Center } from 'native-base'
+import React, { useState ,useEffect, useRef } from 'react'
+import { Platform ,Animated} from 'react-native';
+import Svg,{Circle ,G} from  'react-native-svg';
 import {AntDesign, MaterialIcons} from '@expo/vector-icons'
-import { Platform } from 'react-native';
 import useKeyboard from '../../components/hooks/useKeyboard';
 import LottieView from 'lottie-react-native'
 
+
 const size=130;
-const strokeWidth=20;
-const radius= (size-strokeWidth)/2;
+const strokeWidth=10;
+const radius= size/2 - strokeWidth/2;
 const circumference= radius*2*Math.PI;
 
 
-
+const AnimatedCircle=Animated.createAnimatedComponent(Circle)
 
 const SignUpScreen = ({navigation}:any) => {
 
+  //const {Value,Interpolate,multiply}=Animated
+
     const [globalIndex,setGlobalIndex]=useState(1);
+
+    //Animation logic
+    const progressAnimation= useRef(new Animated.Value(1)).current;
+    const progressRef:any=useRef(null)
+
+    const animation=(toValue:any)=>{
+      return Animated.timing(progressAnimation,{
+        toValue,
+        duration:350,
+        useNativeDriver:true
+      }).start()
+    }
 
     //want to show or hide image on weather the keyboard in open or not
     const isKeyboardVisible=useKeyboard();
@@ -55,10 +70,30 @@ const SignUpScreen = ({navigation}:any) => {
   
 
     useEffect(() => {
-        
+        //this will load the component based on global index 
         LoadComponent()
+
+        //Run circular progress animation
+        animation(globalIndex)
+        
       
     }, [globalIndex])
+
+    useEffect(() => { 
+
+      progressAnimation.addListener((value) => { 
+       const  strokeDashoffset= circumference - (circumference * value.value) / 7
+                
+       if(progressRef?.current){
+          progressRef.current.setNativeProps({strokeDashoffset})
+       }
+
+      })
+
+       return ()=>{
+         progressAnimation.removeAllListeners()
+       }
+     },[])
     
 
   return (
@@ -86,55 +121,68 @@ const SignUpScreen = ({navigation}:any) => {
           <></>
         )}
         {/* progress bar */}
-        <HStack
-          alignItems="center"
-          justifyContent="space-around"
-          
-          px={5}
-        >
-          <Box justifyContent={"center"} alignItems={"center"}>
-            <Button
-              w={10}
-              h={10}
-              borderRadius={50}
-              bg={"emerald.600"}
-              isDisabled={globalIndex <= 1}
-              onPress={() => {
-                setGlobalIndex(globalIndex - 1);
-              }}
-            >
-              {globalIndex - 1}
-            </Button>
+        <HStack alignItems="center" justifyContent="space-around" px={5}>
+          <Box justifyContent={"center"} alignItems={"center"} w={10}>
+            {globalIndex > 1 ? (
+              <Button
+                w={10}
+                h={10}
+                borderRadius={50}
+                bg={"emerald.600"}
+                isDisabled={globalIndex <= 1}
+                onPress={() => {
+                  setGlobalIndex(globalIndex - 1);
+                }}
+              >
+                {globalIndex - 1}
+              </Button>
+            ) : (
+              <></>
+            )}
           </Box>
-          <Svg
-            width={size}
-            height={size}
-            
-          >
-            <Circle
-              stroke="green"
-              fill="none"
-              cx={size / 2}
-              cy={size / 2}
-              r={radius}
-              {...{ strokeWidth }}
-              strokeDasharray={`${circumference} ${circumference}`}
-            ></Circle>
-            <Text alignSelf={'center'} mt={12} fontSize={20} fontWeight='bold'>{globalIndex} / 7</Text>
+          <Svg width={size} height={size}>
+            <G rotation="-90" origin={size / 2}>
+              <Circle
+                stroke="grey"
+                fill="none"
+                cx={size / 2}
+                cy={size / 2}
+                r={radius}
+              ></Circle>
+
+              <Circle
+                stroke="green"
+                fill="none"
+                ref={progressRef}
+                cx={size / 2}
+                cy={size / 2}
+                r={radius}
+                strokeWidth={strokeWidth}
+                strokeDasharray={circumference}
+                
+              ></Circle>
+            </G>
+
           </Svg>
-          <Box justifyContent={"center"} alignItems={"center"}>
-            <Button
-              w={10}
-              h={10}
-              borderRadius={50}
-              bg={"emerald.600"}
-              isDisabled={globalIndex >= 7}
-              onPress={() => { 
+            <Text position={'absolute'} ml={150} fontSize={20} fontWeight="bold">
+              <Text color={"emerald.600"} fontSize={26}>{globalIndex} </Text>/ 7
+            </Text>
+          <Box justifyContent={"center"} alignItems={"center"} w={10}>
+            {globalIndex < 7 ? (
+              <Button
+                w={10}
+                h={10}
+                borderRadius={50}
+                bg={"emerald.600"}
+                onPress={() => {
                   setGlobalIndex(globalIndex + 1);
-              }}
-            >
-              { globalIndex===7?globalIndex: globalIndex + 1}
-            </Button>
+                }}
+              >
+                {globalIndex === 7 ? globalIndex : globalIndex + 1}
+              </Button>
+            ) : (
+              <></>
+            )}
           </Box>
         </HStack>
         {/* Bottom component */}
@@ -387,10 +435,10 @@ const Congratulation=({onContinue}:any) => {
 
            <Text textAlign={"center"}>Your Account is ready</Text>
          </Box>
-         <Box px={5}>
+         <Box px={5} >
            
              <LottieView
-               style={{ height: 200, alignSelf: "center", marginBottom: 5 }}
+               style={{ height: 200, alignSelf: "center", marginBottom: 5 ,width:200}}
                source={require("../../assets/animations/congratulation.json")}
                autoPlay
 

@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react'
-import { StyleSheet, View, FlatList } from 'react-native'
+import { FlatList } from 'react-native'
 import {  Text, Box , Button, HStack, Pressable, Image, VStack } from "native-base";
 
 const viewConfigRef={viewAreaCoveragePercentThreshold:90}
