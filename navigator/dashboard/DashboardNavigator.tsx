@@ -10,7 +10,7 @@ const DashboardNavigator = () => {
   return (
     <DashboardStack.Navigator screenOptions={defaultNavigationOption}>
       <DashboardStack.Screen
-        name="Welcome"
+        name="Home"
         component={Dashboard}
         options={DashboardOptions}
       />
