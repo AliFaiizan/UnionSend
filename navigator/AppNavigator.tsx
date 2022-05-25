@@ -17,7 +17,7 @@ const AppNavigator = (props: any) => {
 
   return (
     <NavigationContainer>
-      {!loggedIn ? <DashboardNavigator /> : <DashboardNavigator />}
+      {!loggedIn ? <AuthNavigator /> : <DashboardNavigator />}
     </NavigationContainer>
   );
 };

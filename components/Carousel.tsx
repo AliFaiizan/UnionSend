@@ -1,16 +1,33 @@
 import { StyleSheet, View, FlatList } from "react-native";
 import React, { useCallback, useRef, useState } from "react";
-import { Box, HStack, Text, Pressable } from "native-base";
+import { Box, HStack, Text, Pressable,Image } from "native-base";
 const viewConfigRef = { viewAreaCoveragePercentThreshold: 90 };
 
 
 const renderComponent = ({ item }: any) => {
+  console.log(item.uri)
   return (
-    <Box alignItems="center" m={5} justifyContent="center">
-      <Text fontSize={20} fontWeight="bold">
-        {item.title}
-      </Text>
-      <Text mt={2}>{item.description}</Text>
+    <Box alignItems="center" m={item.title ? 5 : 0} justifyContent="center">
+      {item.title ? (
+        <>
+          <Text fontSize={20} fontWeight="bold">
+            {item.title}
+          </Text>
+          <Text mt={2}>{item.description}</Text>
+        </>
+      ) : (
+        <Box justifyContent={"center"}>
+          <Image
+            width={280}
+            height={300}
+            source={{
+              uri: item.uri,
+            }}
+            resizeMode="contain"
+           
+          />
+        </Box>
+      )}
     </Box>
   );
 };

@@ -8,6 +8,14 @@ import authReducer from './store/reducers/auth.reducer'
 
 import AppNavigator from './navigator/AppNavigator';
 
+import {LinearGradient} from 'expo-linear-gradient'
+
+const nativeBaseConfig = {
+  dependencies: {
+    "linear-gradient": LinearGradient,
+  },
+};
+
 
 const rootReducer = combineReducers({
   auth:authReducer
@@ -22,7 +30,7 @@ const store = createStore(
 export default function App() {
   return (
     <Provider store={store}>
-      <NativeBaseProvider>
+      <NativeBaseProvider config={nativeBaseConfig}>
         <AppNavigator />
       </NativeBaseProvider>
     </Provider>

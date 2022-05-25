@@ -1,5 +1,5 @@
-import React, { useCallback, useRef, useState } from 'react'
-import { FlatList } from 'react-native'
+import React from 'react'
+
 import {  Text, Box , Button, HStack, Pressable, Image, VStack } from "native-base";
 import Carousel from '../../components/Carousel';
 
