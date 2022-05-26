@@ -10,9 +10,10 @@ import DashboardNavigator from "./dashboard/DashboardNavigator"
 
 const AppNavigator = (props: any) => {
 
-  const loggedIn=useSelector((state:any) => { 
-     return state.auth.isLoggedIn
-  })
+  // const loggedIn=useSelector((state:any) => { 
+  //    return state.auth.isLoggedIn
+  // })
+  const loggedIn=true
   
 
   return (

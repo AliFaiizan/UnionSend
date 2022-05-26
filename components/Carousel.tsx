@@ -5,7 +5,6 @@ const viewConfigRef = { viewAreaCoveragePercentThreshold: 90 };
 
 
 const renderComponent = ({ item }: any) => {
-  console.log(item.uri)
   return (
     <Box alignItems="center" m={item.title ? 5 : 0} justifyContent="center">
       {item.title ? (
@@ -24,7 +23,7 @@ const renderComponent = ({ item }: any) => {
               uri: item.uri,
             }}
             resizeMode="contain"
-           
+            alt="Failed to load image"
           />
         </Box>
       )}

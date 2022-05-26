@@ -1,13 +1,17 @@
 
-import {Text, Pressable, Icon, Box, HStack, Button, Avatar,Divider } from 'native-base';
+import {Text, Pressable, Icon, Box,
+     HStack, Button, Avatar,Divider,
+    Image,  FlatList } from 'native-base';
 import React from 'react'
 import { AntDesign ,Feather} from "@expo/vector-icons";
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import Carousel from '../../components/Carousel';
+import { subCategoryData } from '../../data/subCategoryData';
 
 const CText=(props:any) => { 
     return <Text {...props} color={'white'}>{props.children}</Text>
  }
+
 
 const carouselData = [
   {
@@ -24,19 +28,26 @@ const carouselData = [
 
 const Dashboard = () => {
   return (
-      <>
-        <MainCard />
-        <Categories />
-        <Divider />
-        {/* sub categories */}
+    <>
+      <MainCard />
+      <Categories />
+      <Divider />
+      {/* sub categories */}
 
-        <Box flex={1} justifyContent="center" alignItems={'center'}>
+      <Box h={300} w={'100%'}>
+        <FlatList
+          style={{ alignSelf: "center" }}
+          data={subCategoryData}
+          renderItem={SubCategories}
+          numColumns={4}
+          showsVerticalScrollIndicator={false}
+        />
+      </Box>
 
+      <Box flex={1} justifyContent="center" alignItems={'center'}>
             <Carousel data={carouselData} />
-        </Box>
-        
-
-      </>
+      </Box>
+    </>
   );
 }
 
@@ -90,6 +101,7 @@ const MainCard=() => {
 const Categories=() => { 
     return (
       <HStack p={4} justifyContent={"space-around"}>
+        <Pressable >
         <Box alignItems={"center"}>
           <Box
             bg={"muted.300"}
@@ -111,49 +123,69 @@ const Categories=() => {
 
           <Text fontWeight={"bold"}>Send Money</Text>
         </Box>
-        <Box alignItems={"center"}>
-          <Box
-            bg={"muted.300"}
-            borderRadius={10}
-            justifyContent={"center"}
-            alignItems={"center"}
-            p={13}
-          >
-            <Icon
-              as={Feather}
-              name="shopping-bag"
-              color="emerald.600"
-              size={10}
-              _dark={{
-                color: "warmGray.50",
-              }}
-            />
-          </Box>
-          <Text fontWeight={"bold"}>Shop Online</Text>
-        </Box>
-        <Box alignItems={"center"}>
-          <Box
-            bg={"muted.300"}
-            borderRadius={10}
-            justifyContent={"center"}
-            alignItems={"center"}
-            p={13}
-          >
-            <Icon
-              as={AntDesign}
-              name="creditcard"
-              color="emerald.600"
-              size={10}
-              _dark={{
-                color: "warmGray.50",
-              }}
-            />
-          </Box>
-          <Text fontWeight={"bold"}>Card</Text>
-        </Box>
+
+        </Pressable>
+
+        <Pressable>
+            <Box alignItems={"center"}>
+            <Box
+                bg={"muted.300"}
+                borderRadius={10}
+                justifyContent={"center"}
+                alignItems={"center"}
+                p={13}
+            >
+                <Icon
+                as={Feather}
+                name="shopping-bag"
+                color="emerald.600"
+                size={10}
+                _dark={{
+                    color: "warmGray.50",
+                }}
+                />
+            </Box>
+            <Text fontWeight={"bold"}>Shop Online</Text>
+            </Box>
+
+        </Pressable>
+
+        <Pressable>
+            <Box alignItems={"center"}>
+            <Box
+                bg={"muted.300"}
+                borderRadius={10}
+                justifyContent={"center"}
+                alignItems={"center"}
+                p={13}
+            >
+                <Icon
+                as={AntDesign}
+                name="creditcard"
+                color="emerald.600"
+                size={10}
+                _dark={{
+                    color: "warmGray.50",
+                }}
+                />
+            </Box>
+            <Text fontWeight={"bold"}>Card</Text>
+            </Box>
+
+        </Pressable>
       </HStack>
     );
  }
+
+const SubCategories=({item}:any) => { 
+    return <Pressable onPress={() => { console.log('presed') }}>
+        <Box px={3} justifyContent='center' alignItems={'center'} w={20}>
+            <Image source={item.image}  w={20} h={20} alt='image' resizeMode='contain' />
+            <Text numberOfLines={2}>{item.title}</Text>
+        </Box>
+    </Pressable>
+    
+  }
 
 
 export const ScreenOptions:any=({navigation}:any):NativeStackNavigationOptions=>{
