@@ -1,7 +1,7 @@
 
 import {Text, Pressable, Icon, Box,
      HStack, Button, Avatar,Divider,
-    Image,  FlatList } from 'native-base';
+    Image,  FlatList, ScrollView } from 'native-base';
 import React from 'react'
 import { AntDesign ,Feather} from "@expo/vector-icons";
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
@@ -34,18 +34,21 @@ const Dashboard = () => {
       <Divider />
       {/* sub categories */}
 
-      <Box h={300} w={'100%'}>
+      <Box flex={2}>
         <FlatList
-          style={{ alignSelf: "center" }}
+          contentContainerStyle={{
+            justifyContent: "center",
+            alignItems: "center",
+            paddingTop: 5,
+          }}
           data={subCategoryData}
           renderItem={SubCategories}
           numColumns={4}
           showsVerticalScrollIndicator={false}
         />
       </Box>
-
-      <Box flex={1} justifyContent="center" alignItems={'center'}>
-            <Carousel data={carouselData} />
+      <Box  justifyContent="center" alignItems={"center"}>
+        <Carousel data={carouselData} />
       </Box>
     </>
   );
@@ -100,7 +103,7 @@ const MainCard=() => {
 
 const Categories=() => { 
     return (
-      <HStack p={4} justifyContent={"space-around"}>
+      <HStack px={3} pt={2} justifyContent={"space-around"}>
         <Pressable >
         <Box alignItems={"center"}>
           <Box
@@ -114,7 +117,7 @@ const Categories=() => {
               as={AntDesign}
               name="wallet"
               color="emerald.600"
-              size={10}
+              size={8}
               _dark={{
                 color: "warmGray.50",
               }}
@@ -139,7 +142,7 @@ const Categories=() => {
                 as={Feather}
                 name="shopping-bag"
                 color="emerald.600"
-                size={10}
+                size={8}
                 _dark={{
                     color: "warmGray.50",
                 }}
@@ -163,7 +166,7 @@ const Categories=() => {
                 as={AntDesign}
                 name="creditcard"
                 color="emerald.600"
-                size={10}
+                size={8}
                 _dark={{
                     color: "warmGray.50",
                 }}
@@ -179,9 +182,9 @@ const Categories=() => {
 
 const SubCategories=({item}:any) => { 
     return <Pressable onPress={() => { console.log('presed') }}>
-        <Box px={3} justifyContent='center' alignItems={'center'} w={20}>
-            <Image source={item.image}  w={20} h={20} alt='image' resizeMode='contain' />
-            <Text numberOfLines={2}>{item.title}</Text>
+        <Box mx={2} my={1} justifyContent='center' alignItems={'center'} w={20}>
+            <Image source={item.image}  w={10} h={10} alt='image' resizeMode='contain' />
+            <Text textAlign={'center'} fontWeight={'600'} numberOfLines={2}>{item.title}</Text>
         </Box>
     </Pressable>
     
