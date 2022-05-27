@@ -151,7 +151,7 @@ const SignUpScreen = ({navigation}:any) => {
               ></Circle>
 
               <Circle
-                stroke="green"
+                stroke="#059669"
                 fill="none"
                 ref={progressRef}
                 cx={size / 2}
@@ -159,14 +159,15 @@ const SignUpScreen = ({navigation}:any) => {
                 r={radius}
                 strokeWidth={strokeWidth}
                 strokeDasharray={circumference}
-                
               ></Circle>
             </G>
-
           </Svg>
-            <Text position={'absolute'} ml={150} fontSize={20} fontWeight="bold">
-              <Text color={"emerald.600"} fontSize={26}>{globalIndex} </Text>/ 7
+          <Text position={"absolute"} ml={150} fontSize={20} fontWeight="bold">
+            <Text color={"emerald.600"} fontSize={26}>
+              {globalIndex}{" "}
             </Text>
+            / 7
+          </Text>
           <Box justifyContent={"center"} alignItems={"center"} w={10}>
             {globalIndex < 7 ? (
               <Button
@@ -439,9 +440,9 @@ const Congratulation=({onContinue}:any) => {
            
              <LottieView
                style={{ height: 200, alignSelf: "center", marginBottom: 5 ,width:200}}
-               source={require("../../assets/animations/congratulation.json")}
+               source={require("../../assets/animations/1-verified.json")}
                autoPlay
-
+               loop={false}
              />           
 
            <Button mt={2} colorScheme={"emerald"} onPress={onContinue}>

@@ -181,12 +181,34 @@ const Categories=() => {
  }
 
 const SubCategories=({item}:any) => { 
-    return <Pressable onPress={() => { console.log('presed') }}>
-        <Box mx={2} my={1} justifyContent='center' alignItems={'center'} w={20}>
-            <Image source={item.image}  w={10} h={10} alt='image' resizeMode='contain' />
-            <Text textAlign={'center'} fontWeight={'600'} numberOfLines={2}>{item.title}</Text>
+    return (
+      <Pressable
+        onPress={() => {
+          console.log("presed");
+        }}
+      >
+        <Box mx={2} my={1} justifyContent="center" alignItems={"center"} w={20}>
+          <Box
+            borderRadius={50}
+            bg={"muted.300"}
+            p={2.5}
+            justifyContent="center"
+            alignItems={"center"}
+          >
+            <Image
+              source={item.image}
+              w={10}
+              h={10}
+              alt="image"
+              resizeMode="contain"
+            />
+          </Box>
+          <Text textAlign={"center"} fontWeight={"600"} numberOfLines={2}>
+            {item.title}
+          </Text>
         </Box>
-    </Pressable>
+      </Pressable>
+    );
     
   }
 
