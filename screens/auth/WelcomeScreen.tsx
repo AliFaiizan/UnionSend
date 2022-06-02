@@ -2,6 +2,7 @@ import React from 'react'
 
 import {  Text, Box , Button, HStack, Pressable, Image, VStack } from "native-base";
 import Carousel from '../../components/Carousel';
+import { Dimensions } from 'react-native';
 
 
 const data = [
@@ -26,15 +27,14 @@ const data = [
 
 const WelcomeScreen = ({navigation}:any) => {
 
-
-
+  const {width,height}=Dimensions.get('screen');
 
   return (
     <VStack flex={1} alignItems='center'>
       <Box>
         <Image
-          width={300}
-          height={300}
+          width={width}
+          height={height/2}
           resizeMode="contain"
           source={{
             uri: "https://alpha.techcon.com.pk/unionsend-mobile/img/logo.png",

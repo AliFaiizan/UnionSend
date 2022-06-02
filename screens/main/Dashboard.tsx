@@ -47,7 +47,7 @@ const Dashboard = () => {
           showsVerticalScrollIndicator={false}
         />
       </Box>
-      <Box  justifyContent="center" alignItems={"center"}>
+      <Box justifyContent="center" alignItems={"center"}>
         <Carousel data={carouselData} />
       </Box>
     </>
